@@ -8,6 +8,33 @@ use Illuminate\Support\Facades\Validator;
 
 class MentorController extends Controller
 {
+    public function index()
+    {
+        $mentor = Mentor::all();
+
+        return response()->json([
+            'status' => 'success',
+            'result' => $mentor
+        ]);
+    }
+
+    public function show($id)
+    {
+        $mentor = Mentor::find($id);
+
+        if (!$mentor) {
+            return  response()->json([
+                'status' => 'error',
+                'message' => 'mentor not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'result' => $mentor
+        ]);
+    }
+
     public function create(Request $request)
     {
         $rules = [
@@ -72,6 +99,25 @@ class MentorController extends Controller
         return response()->json([
             'status' => 'success',
             'result' => $mentor
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $mentor = Mentor::find($id);
+
+        if (!$mentor) {
+            return  response()->json([
+                'status' => 'error',
+                'message' => 'mentor not found'
+            ], 404);
+        }
+
+        $mentor->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'mentor deleted'
         ]);
     }
 }
